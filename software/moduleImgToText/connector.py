@@ -5,7 +5,7 @@ currDir = "E:\MAJOR_PROJECT\software\moduleImgToText"
 def getText():
     eng = matlab.engine.start_matlab()
     eng.cd(currDir, nargout=0)
-    x=eng.getText(os.path.join(currDir,"images\img2.jpg"))
+    x=eng.getText(os.path.join(currDir,"images\img1.png"))
     return x
 
 

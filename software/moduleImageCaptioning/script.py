@@ -5,25 +5,21 @@ import keras
 import json
 import pickle
 from keras.applications.inception_v3 import InceptionV3, preprocess_input, decode_predictions
-from keras.preprocessing import image
+import keras.utils as image
 from keras.models import Model, load_model
-from keras.preprocessing.sequence import pad_sequences
-# from keras.utils import to_categorical
-# from keras.layers import Input, Dense, Dropout, Embedding, LSTM
-# from keras.layers.merge import add
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 import collections
 import random
 from PIL import Image
-#for voice
-# from playsound import playsound
-from gtts import gTTS 
 import os 
 import time
 import cv2
+import random
+import string
 
 
-model = load_model(os.path.join(os.getcwd(),"Model_Weights/model_8.h5"))
+model = load_model(os.path.join(os.getcwd(),"moduleImageCaptioning/Model_Weights/model_8.h5"))
 model.make_predict_function()
 
 model_temp = InceptionV3(weights='imagenet',input_shape=(299,299,3))
@@ -47,15 +43,14 @@ def preprocess_image(img):
 def encode_image(img):
     img = preprocess_image(img)
     feature_vector = model_inception.predict(img)
-    # reshape from (1, 2048) to (2048, )
     feature_vector = feature_vector.reshape(1, feature_vector.shape[1])
     return feature_vector
 
 
-with open(os.path.join(os.getcwd(),"Storage/word_to_idx.pkl"), 'rb') as w2i:
+with open(os.path.join(os.getcwd(),"moduleImageCaptioning/Storage/word_to_idx.pkl"), 'rb') as w2i:
     word_to_idx = pickle.load(w2i)
     
-with open(os.path.join(os.getcwd(),"Storage/idx_to_word.pkl"), 'rb') as i2w:
+with open(os.path.join(os.getcwd(),"moduleImageCaptioning/Storage/idx_to_word.pkl"), 'rb') as i2w:
     idx_to_word = pickle.load(i2w)
 
 
@@ -63,8 +58,6 @@ with open(os.path.join(os.getcwd(),"Storage/idx_to_word.pkl"), 'rb') as i2w:
 def beam_search(image, beam_index = 5):
     start = [word_to_idx["startseq"]]
     max_length = 74
-    # start_word[0][0] = index of the starting word
-    # start_word[0][1] = probability of the word predicted
     start_word = [[start, 0.0]]
     
     while len(start_word[0][0]) < max_length:
@@ -111,24 +104,17 @@ def caption_this_image(image):
     return caption
 
 
-# def voice(myText):
 
-#     # Language we want to use 
-#     language = 'en'
+def output_caption_stream(image):
+    nm = ''.join(random.choices(string.ascii_lowercase, k=10))+".jpg"
+    nm = os.path.join(os.getcwd(),"moduleImageCaptioning/images",nm)
+    cv2.imwrite(nm,image)
+    return caption_this_image(nm)
 
-#     output = gTTS(text=myText, lang=language, slow=False)
-#     t=time.time()
-#     nm="output"+str(t)+".mp3"
-#     output.save(nm)
-#     playsound(nm)
-
-
-
-def output_caption_stream(image,count):
-    nm = "frame"+str(count)+".jpg"
-    cv2.imwrite(nm, image)
-    print(caption_this_image(nm))
-    # voice(caption_this_image(image))
+def getCaption():
+    loc = os.path.join(os.getcwd(),"moduleImageCaptioning/images/download.jpg")
+    img = cv2.imread(loc)
+    return output_caption_stream(img)
 
 if __name__ == "__main__":
-    img = cv2.imread("download.jpg",0)
+    print(getCaption())

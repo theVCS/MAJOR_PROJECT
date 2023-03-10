@@ -1,6 +1,6 @@
 # Environment Setup
 
-- Python 3.8.0
+- Python 3.8.2
 
 # Install Requirements
 
