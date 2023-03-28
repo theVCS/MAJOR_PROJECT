@@ -5,7 +5,7 @@ currDir = "E:\MAJOR_PROJECT\software\moduleFaceRecon"
 def recognise():
     eng = matlab.engine.start_matlab()
     eng.cd(currDir, nargout=0)
-    x=eng.recognise(os.path.join(currDir,"images/Prince Mishra/0.bmp"))
+    x=eng.recognise()
     return x
 
 

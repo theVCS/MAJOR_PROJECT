@@ -5,6 +5,7 @@ from moduleImageCaptioning.script import getCaption
 from moduleFaceRecon.connector import recognise
 app = Flask(__name__)
 
+# command L1
 @app.route('/')
 def home():
 	context = {
@@ -14,8 +15,10 @@ def home():
 	}
 	return context
 
+# command L2
 @app.route('/getImageText')
 def getImageText():
+	print("---------------Image to Text------------------")
 	text = getText()
 	context = {
 		"status": "success",
@@ -24,8 +27,10 @@ def getImageText():
 	# speak(text)
 	return context
 
+# command L3
 @app.route('/getImageCaption')
 def getImageCaption():
+	print("---------------Image Caption------------------")
 	text = getCaption()
 	context = {
 		"status": "success",
@@ -34,9 +39,10 @@ def getImageCaption():
 	# speak(text)
 	return context
 
-
+# command L4
 @app.route('/recognisePerson')
 def recognisePerson():
+	print("---------------Face Recognise------------------")
 	text = recognise()
 	context = {
 		"status": "success",

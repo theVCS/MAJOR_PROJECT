@@ -1,8 +1,8 @@
 #include "wifi_connection.h"
 #include <ESP8266WiFi.h>
 
-const char *ssid = "HOME";
-const char *password = "HeroHonda#7982@";
+const char *ssid = "PRINCEMISHRA 4240";
+const char *password = "0123456789";
 
 void connectToWiFi() {
   Serial.print("Connecting to WiFi.........");
